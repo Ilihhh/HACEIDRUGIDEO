@@ -1,0 +1,46 @@
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.exe.config
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.exe
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.pdb
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\MainWindow.g.cs
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\App.g.cs
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService_MarkupCompile.cache
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService_MarkupCompile.lref
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\MainWindow.baml
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.g.resources
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.Properties.Resources.resources
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.GenerateResource.cache
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.exe
+C:\Users\Admin\Desktop\Inzenjerstvo upotrebljivosti u infrastrukturnim sistemima (HCI)\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.pdb
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.exe.config
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.exe
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\NetworkService.pdb
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.AssemblyReference.cache
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\MainWindow.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\NetworkEntitiesView.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\App.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService_MarkupCompile.cache
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService_MarkupCompile.lref
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\MainWindow.baml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\NetworkEntitiesView.baml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.g.resources
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.Properties.Resources.resources
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.GenerateResource.cache
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.CoreCompileInputs.cache
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.exe
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.pdb
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\NetworkDisplayView.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\NetworkDisplayView.baml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\MeasurementGraphView.g.cs
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\Views\MeasurementGraphView.baml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Microsoft.Xaml.Behaviors.dll
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\NetworkService.csproj.CopyComplete
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.dll
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.Net.dll
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.xml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.Net.xml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\App.baml
