@@ -307,7 +307,8 @@ namespace NetworkService.ViewModel
                 CanvasCollection[canvasIndex].Background = Brushes.LightGray;
                 CanvasCollection[canvasIndex].Resources.Remove("taken");
                 CanvasCollection[canvasIndex].Resources.Remove("data");
-                //BorderBrushCollection[canvasIndex] = Brushes.DarkGray;
+                BorderBrushCollection[canvasIndex] = Application.Current.Dispatcher.Invoke(() => (SolidColorBrush)(brushConverter.ConvertFrom("#BBBBBB")));
+                EntitiesOnCanvas[canvasIndex] = new Entity();
 
                DeleteLinesForCanvas(canvasIndex);
             }
