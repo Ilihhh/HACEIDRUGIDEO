@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -60,6 +61,60 @@ namespace NetworkService.ViewModel
             RightMouseButtonDownOnCanvas = new MyICommand<object>(OnRightMouseButtonDown);
         }
 
+        public void DeleteFromCanvas()
+        {
+            for(int i = 0; i < 12; i++)
+            {
+                int canvasIndex = GetCanvasIndexForEntityId(EntitiesOnCanvas[i].Id);
+                if(canvasIndex != -1)
+                {
+                    Entity entityToReturn = (Entity)CanvasCollection[canvasIndex].Resources["data"];
+                    if (entityToReturn.Type == GroupedEntities[0].Type)
+                    {
+                        GroupedEntities[0].Entities.Add(entityToReturn);
+                    }
+                    else
+                    {
+                        GroupedEntities[1].Entities.Add(entityToReturn);
+                    }
+
+                    CanvasCollection[canvasIndex].Background = Brushes.LightGray;
+                    CanvasCollection[canvasIndex].Resources.Remove("taken");
+                    CanvasCollection[canvasIndex].Resources.Remove("data");
+                    BorderBrushCollection[canvasIndex] = Application.Current.Dispatcher.Invoke(() => (SolidColorBrush)(brushConverter.ConvertFrom("#BBBBBB")));
+                    EntitiesOnCanvas[canvasIndex] = new Entity();
+                }
+            }
+            LineCollection.Clear();
+        }
+
+        public void UpdateOnCanvas()
+        {
+            for(int i = 0; i < 12; i++)
+            {
+                Entity poredjenje = new Entity();
+                if(EntitiesOnCanvas[i].Id != poredjenje.Id)
+                {
+                    if (EntitiesOnCanvas[i].Type == GroupedEntities[0].Type)
+                    {
+                        GroupedEntities[0].Entities.Remove(EntitiesOnCanvas[i]);
+                    }
+                    else
+                    {
+                        GroupedEntities[1].Entities.Remove(EntitiesOnCanvas[i]);
+                    }
+
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(EntitiesOnCanvas[i].ImagePath, UriKind.RelativeOrAbsolute);
+                    image.EndInit();
+
+                    CanvasCollection[i].Background = new ImageBrush(image);
+                    CanvasCollection[i].Resources.Add("taken", true);
+                    CanvasCollection[i].Resources.Add("data", EntitiesOnCanvas[i]);
+                }
+            }
+        }
         private void InitializeBorderBrushes()
         {
             BorderBrushCollection = new ObservableCollection<Brush>();
@@ -116,6 +171,8 @@ namespace NetworkService.ViewModel
 
                 if (CanvasCollection[index].Resources["taken"] == null)
                 {
+                    SaveCanvasState();
+
                     BitmapImage image = new BitmapImage();
                     image.BeginInit();
                     image.UriSource = new Uri(draggedItem.ImagePath, UriKind.RelativeOrAbsolute);
@@ -128,6 +185,7 @@ namespace NetworkService.ViewModel
 
                     if(draggingSourceIndex != -1)
                     {
+                        
                         CanvasCollection[draggingSourceIndex].Background = Brushes.LightGray;
                         CanvasCollection[draggingSourceIndex].Resources.Remove("taken");
                         CanvasCollection[draggingSourceIndex].Resources.Remove("data");
@@ -149,7 +207,8 @@ namespace NetworkService.ViewModel
                     }
                     else//
                     {
-                        if(draggedItem.Type == GroupedEntities[0].Type)
+                        
+                        if (draggedItem.Type == GroupedEntities[0].Type)
                         {
                             GroupedEntities[0].Entities.Remove(draggedItem);
                         }
@@ -160,8 +219,9 @@ namespace NetworkService.ViewModel
                     }
                 }
             }
+            dragging = false;
         }
-        private void UpdateLinesForCanvas(int sourceCanvas, int destinationCanvas)
+        public void UpdateLinesForCanvas(int sourceCanvas, int destinationCanvas)
         {
             for (int i = 0; i < LineCollection.Count; i++)
             {
@@ -194,7 +254,7 @@ namespace NetworkService.ViewModel
                     if(index == currentIndex)
                     {
                         x = 74 + (col * 148);
-                        y = 60 + (row * 125);
+                        y = 65 + (row * 120);
                         break;
                     }
                 }
@@ -203,7 +263,7 @@ namespace NetworkService.ViewModel
         }
         private void OnLeftMouseButtonDown(object parameter)
         {
-            if (dragging)                                               //NISAM SIGURAN DAL OVO SME AL RADI :)
+            if (!dragging)                                               
             {
                 int index = Convert.ToInt32(parameter);
                 if (CanvasCollection[index].Resources["taken"] != null)
@@ -235,10 +295,13 @@ namespace NetworkService.ViewModel
                 }
                 else
                 {
+                    ////////
                     destinationCanvasIndex = index;
 
                     if ((sourceCanvasIndex != destinationCanvasIndex) && !DoesLineAlreadyExist(sourceCanvasIndex, destinationCanvasIndex))
                     {
+                        SaveCanvasState();
+
                         linePoint2 = GetPointForCanvasIndex(destinationCanvasIndex);
 
                         currentLine.X2 = linePoint2.X;
@@ -298,7 +361,7 @@ namespace NetworkService.ViewModel
             draggingSourceIndex = -1;
         }
 
-        public void DeleteEntityFromCanvas(Entity e)
+        public void DeleteEntityFromCanvas(Entity e)                        //nisam siguran sta ovde da uradim
         {
             int canvasIndex = GetCanvasIndexForEntityId(e.Id);
 
@@ -364,6 +427,7 @@ namespace NetworkService.ViewModel
 
             if (CanvasCollection[index].Resources["taken"] != null)
             {
+                SaveCanvasState();
                 if (sourceCanvasIndex != -1)
                 {
                     isLineSourceSelected = false;
@@ -421,6 +485,53 @@ namespace NetworkService.ViewModel
                 });
             }
         }
-        
+        /*
+         * public static void SaveState()
+        {
+
+            Dictionary<int, FlowMeter> entityState = new Dictionary<int, FlowMeter>();
+            foreach (var entry in AddedToGrid)
+            {
+                entityState.Add(entry.Key, entry.Value);
+            }
+            Dictionary<string, Line> lineState = new Dictionary<string, Line>();
+            foreach (var entry in Lines)
+            {
+                lineState.Add(entry.Key, entry.Value);
+            }
+
+            List<object> state = new List<object>() { entityState, lineState };
+            //pushing state onto an undo stack
+            MainWindowViewModel.UndoStack.Push(
+                new SaveState<CommandType, object>(CommandType.CanvasManipulation, state));
+
+        }
+         */
+        private void SaveCanvasState()
+        {
+            List<Entity> entityState = new List<Entity>();
+            for (int i = 0; i < 12; i++)
+            {
+                entityState.Add(EntitiesOnCanvas[i]);
+            }
+
+            List<Line> lineState = new List<Line>();
+            foreach (Line l in LineCollection)
+            {
+                lineState.Add(new Line
+                {
+                    X1 = l.X1,
+                    Y1 = l.Y1,
+                    X2 = l.X2,
+                    Y2 = l.Y2,
+                    Source = l.Source,
+                    Destination = l.Destination
+                });
+            }
+
+            // Pushing state onto an undo stack
+            List<object> state = new List<object>() { entityState, lineState };
+            MainWindowViewModel.UndoStack.Push(new SaveState<CommandType, object>(CommandType.CanvasManipulation, state));
+        }
     }
 }

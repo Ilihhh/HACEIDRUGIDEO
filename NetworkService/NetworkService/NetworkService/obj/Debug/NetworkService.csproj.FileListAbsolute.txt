@@ -44,3 +44,8 @@ C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\Netwo
 C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.xml
 C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\FontAwesome5.Net.xml
 C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\obj\Debug\App.baml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Notification.Wpf.dll
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\System.ValueTuple.dll
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Notification.Wpf.pdb
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\Notification.Wpf.xml
+C:\Users\Ilija\OneDrive\Desktop\HCI\Projekat\NetworkService\NetworkService\NetworkService\bin\Debug\System.ValueTuple.xml

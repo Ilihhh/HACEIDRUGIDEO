@@ -1,8 +1,10 @@
 ﻿
+using NetworkService.Helpers;
 using NetworkService.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -41,7 +43,11 @@ namespace NetworkService.ViewModel
         public NetworkEntitiesViewModel()
         {
             Entities = new ObservableCollection<Entity>();
-            Entities.Add(new Entity { Id = 1, Name = "Majmubn", Type ="Digital Manometer", Value = 0 });
+            Entities.CollectionChanged += (sender, e) =>
+            {
+                Console.WriteLine("CollectionChanged event triggered");
+            };
+            //Entities.Add(new Entity { Id = 1, Name = "Majmubn", Type ="Digital Manometer", Value = 0 });
             //EntitiesToShow = Entities;
             FilterData();
             AddEntityCommand = new MyICommand(OnAdd);
@@ -50,6 +56,35 @@ namespace NetworkService.ViewModel
             HideKeyboardCommand = new MyICommand(OnHideKeyboard);
             KeyboardButtonCommand = new RelayCommand(OnKeyboardButtonClicked);
         }
+
+
+        public void RaiseCollectionChanged(ObservableCollection<Entity> collection)
+        {
+            // Kreirajte args za Reset akciju (možete kreirati različite args za različite akcije)
+            NotifyCollectionChangedEventArgs args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+
+            // Pristupite privatnom CollectionChanged događaju pomoću reflection-a
+            var eventInfo = typeof(ObservableCollection<Entity>).GetField("CollectionChanged", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (eventInfo != null)
+            {
+                var eventDelegate = (MulticastDelegate)eventInfo.GetValue(collection);
+                if (eventDelegate != null)
+                {
+                    foreach (var handler in eventDelegate.GetInvocationList())
+                    {
+                        handler.Method.Invoke(handler.Target, new object[] { collection, args });
+                    }
+                }
+            }
+        }
+
+        private void SaveState()
+        {
+            MainWindowViewModel.UndoStack.Push(new SaveState<CommandType, object>
+                (CommandType.EntityManipulation,
+                new ObservableCollection<Entity>(Entities)));
+        }
+
 
         private void OnKeyboardButtonClicked(object parameter)
         {
@@ -180,7 +215,7 @@ namespace NetworkService.ViewModel
         }
 
 
-        private void FilterData()
+        public void FilterData()
         {
             if(string.IsNullOrWhiteSpace(SearchText))
             {
@@ -224,49 +259,76 @@ namespace NetworkService.ViewModel
         }
         public void OnRemove()
         {
-            Entities.Remove(SelectedEntity);
-            FilterData();
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete selected entity?", "Delete confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                SaveState();
+                Entities.Remove(SelectedEntity);
+                ToastNotifications.RaiseToast(
+                    "Success",
+                    $"Selected entity deleted",
+                    Notification.Wpf.NotificationType.Information);
+                FilterData();
+            }
         }
         public void OnAdd()
         {
             try
             {
-                int parseId;
-                bool canParse = int.TryParse(CurrentEntity.IdField, out parseId);
-                CurrentEntity.DoesIdAlreadyExist = false;
+                MessageBoxResult result = MessageBox.Show("Are you sure you want do add entity?", "Add confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                if(canParse)
+                if (result == MessageBoxResult.Yes)
                 {
-                    foreach(Entity e in Entities)
+                    int parseId;
+                    bool canParse = int.TryParse(CurrentEntity.IdField, out parseId);
+                    CurrentEntity.DoesIdAlreadyExist = false;
+
+                    if (canParse)
                     {
-                        if(e.Id == parseId)
+                        foreach (Entity e in Entities)
                         {
-                            CurrentEntity.DoesIdAlreadyExist = true;
-                            break;                  
+                            if (e.Id == parseId)
+                            {
+                                CurrentEntity.DoesIdAlreadyExist = true;
+                                break;
+                            }
                         }
                     }
+
+                    CurrentEntity.Validate();
+
+                    if (CurrentEntity.IsValid)
+                    {
+                        SaveState();
+                        Entities.Add(new Entity() { Id = parseId, Name = CurrentEntity.Name, ImagePath = CurrentEntity.ImagePath, Type = CurrentEntity.Type, Value = 0 });
+                        CurrentEntity.IdField = String.Empty;
+                        CurrentEntity.Name = String.Empty;
+
+                        ToastNotifications.RaiseToast(
+                    "Success!",
+                    "New entity added.",
+                    Notification.Wpf.NotificationType.Success);
+                        
+                    }
+                    else
+                    {
+                        ToastNotifications.RaiseToast(
+                    "Error",
+                    $"Invalid filed values",
+                    Notification.Wpf.NotificationType.Error);
+                    }
+
+                    // Using filtering function so the changes apply to 'EntitiesToShow'
+                    FilterData();
                 }
-
-                CurrentEntity.Validate();
-
-                if(CurrentEntity.IsValid)
-                {
-                    Entities.Add(new Entity() { Id = parseId, Name = CurrentEntity.Name, ImagePath = CurrentEntity.ImagePath, Type = CurrentEntity.Type, Value = 0 });
-                    CurrentEntity.IdField = String.Empty;
-                    CurrentEntity.Name = String.Empty;
-                    //CurrentEntity.ImagePath = "pack://application:,,,/NetworkService;component/Images/no-image.jpg";
-                }
-
-                
-
-                //Using filtering function so the changes apply to 'EntitiesToShow'
-                FilterData();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"{DateTime.Now} - {ex.Message}");
             }
         }
+
 
         private void OnShowKeyboard(object parameter)
         {

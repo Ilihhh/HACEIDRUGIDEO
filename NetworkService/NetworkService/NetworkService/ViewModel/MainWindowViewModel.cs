@@ -1,7 +1,10 @@
 ﻿using NetworkService.Model;
+using NetworkService.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,7 +18,11 @@ namespace NetworkService.ViewModel
 {
     public class MainWindowViewModel : BindableBase
     {
+        public static Stack<SaveState<CommandType, object>> UndoStack { get; set; }
+        public MyICommand UndoCommand { get; set; }
+
         public MyICommand<string> NavCommand { get; private set; }
+        
 
         private NetworkEntitiesViewModel networkEntitiesViewModel = new NetworkEntitiesViewModel();
         private NetworkDisplayViewModel networkDisplayViewModel = new NetworkDisplayViewModel();
@@ -33,14 +40,133 @@ namespace NetworkService.ViewModel
 
             NavCommand = new MyICommand<string>(OnNav);
 
+            UndoStack = new Stack<SaveState<CommandType, object>>();
+
+            UndoCommand = new MyICommand(OnUndo, CanUndo);
+
             CurrentViewModel = networkEntitiesViewModel;
 
             networkEntitiesViewModel.Entities.CollectionChanged += this.OnCollectionChanged;
         }
 
+        public void OnUndo()
+        {
+            SaveState<CommandType, object> saveState = UndoStack.Pop();
+            if (saveState.CommandType == CommandType.NavCommand)
+            {
+                Type viewModelType = saveState.SavedState as Type;
+
+                if (viewModelType == typeof(NetworkEntitiesViewModel))
+                {
+                    CurrentViewModel = networkEntitiesViewModel;
+                }
+                else if (viewModelType == typeof(NetworkDisplayViewModel))
+                {
+                    CurrentViewModel = networkDisplayViewModel;
+                }
+                else if (viewModelType == typeof(MeasurementGraphViewModel))
+                {
+                    CurrentViewModel = measurementGraphViewModel;
+                }
+                else
+                {
+                    CurrentViewModel = networkEntitiesViewModel;
+                }
+            }
+            else if (saveState.CommandType == CommandType.EntityManipulation)
+            {
+                ObservableCollection<Entity> savedEntities = saveState.SavedState as ObservableCollection<Entity>;
+                if (savedEntities != null)
+                {
+                    // Očistite trenutne entitete
+                    var entities = networkEntitiesViewModel.Entities.ToList(); // Kopiramo trenutne entitete u listu
+
+                    // Uklanjamo entitete jedan po jedan
+                    foreach (var entity in entities)
+                    {
+                        if(!savedEntities.Contains(entity))
+                        {
+                            networkEntitiesViewModel.Entities.Remove(entity);
+                        }
+                    }
+
+                    // Dodajte nove entitete jedan po jedan
+                    foreach (var entity in savedEntities)
+                    {
+                        if(!entities.Contains(entity))
+                        {
+                            networkEntitiesViewModel.Entities.Add(entity);
+                        }
+                    }
+                }
+                networkEntitiesViewModel.FilterData();
+            }
+            else if (saveState.CommandType == CommandType.CanvasManipulation)
+            {
+                List<object> state = saveState.SavedState as List<object>;
+                if (state == null || state.Count < 2)
+                {
+                    Debug.WriteLine("Error: state is null or does not contain enough elements.");
+                    return;
+                }
+
+                // Proverite stvarne tipove objekata u listi
+                foreach (var item in state)
+                {
+                    Debug.WriteLine("Type of item in state: " + item.GetType());
+                }
+
+                // Direkto kastovanje elemenata
+                List<Entity> list1 = state[0] as List<Entity>;
+                List<Line> list2 = state[1] as List<Line>;
+
+                if (list1 == null)
+                {
+                    Debug.WriteLine("Error: list1 is null.");
+                }
+                if (list2 == null)
+                {
+                    Debug.WriteLine("Error: list2 is null.");
+                }
+
+                // Dalji kod koji koristi list1 i list2
+                networkDisplayViewModel.DeleteFromCanvas();
+
+                for (int i = 0; i < 12; i++)
+                {
+                    networkDisplayViewModel.EntitiesOnCanvas[i] = list1[i];
+                }
+                networkDisplayViewModel.UpdateOnCanvas();
+
+                if (list2 != null)
+                {
+                    foreach (Line l in list2)
+                    {
+                        networkDisplayViewModel.LineCollection.Add(l);
+                    }
+                }
+
+
+            }
+            else if(saveState.CommandType == CommandType.LineManipulation)
+            {
+
+            }
+            
+
+            GC.Collect();
+            UndoCommand.RaiseCanExecuteChanged();
+            
+        }
+        public bool CanUndo()
+        {
+            return UndoStack.Count != 0;
+        }
+
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.NewItems != null)
+            UndoCommand.RaiseCanExecuteChanged();
+            if (e.NewItems != null)
             {
                 foreach(Entity newEntity in e.NewItems)
                 {
@@ -105,6 +231,7 @@ namespace NetworkService.ViewModel
             set
             {
                 SetProperty(ref currentViewModel, value);
+                UndoCommand.RaiseCanExecuteChanged();
             }
         }
         
@@ -113,13 +240,25 @@ namespace NetworkService.ViewModel
             switch(destination)
             {
                 case "NetworkEntities":
-                    CurrentViewModel = networkEntitiesViewModel;
+                    if(CurrentViewModel != networkEntitiesViewModel)
+                    {
+                        UndoStack.Push(new SaveState<CommandType, object>(CommandType.NavCommand, CurrentViewModel.GetType()));
+                        CurrentViewModel = networkEntitiesViewModel;
+                    }
                     break;
                 case "NetworkDisplay":
-                    CurrentViewModel = networkDisplayViewModel;
+                    if(CurrentViewModel != networkDisplayViewModel)
+                    {
+                        UndoStack.Push(new SaveState<CommandType, object>(CommandType.NavCommand, CurrentViewModel.GetType()));
+                        CurrentViewModel = networkDisplayViewModel;
+                    }
                     break;
                 case "MeasurementGraph":
-                    CurrentViewModel = measurementGraphViewModel;
+                    if(CurrentViewModel != measurementGraphViewModel)
+                    {
+                        UndoStack.Push(new SaveState<CommandType, object>(CommandType.NavCommand, CurrentViewModel.GetType()));
+                        CurrentViewModel = measurementGraphViewModel;
+                    }
                     break;
             }
         }
@@ -175,13 +314,13 @@ namespace NetworkService.ViewModel
                                     networkEntitiesViewModel.Entities[idx].Value = newValue;
 
 
-                                    /*
+                                    
                                     using (StreamWriter writer = File.AppendText("Log.txt"))
                                     {
                                         DateTime dateTime = DateTime.Now;
                                         writer.WriteLine($"{dateTime}: {networkEntitiesViewModel.Entities[idx].Type}, {newValue}");
                                     }
-                                    */
+                                    
                                     Application.Current.Dispatcher.Invoke(() => networkDisplayViewModel.UpdateEntityOnCanvas(networkEntitiesViewModel.Entities[idx]));
                                     //measurementGraphViewModel.OnShow();
 
