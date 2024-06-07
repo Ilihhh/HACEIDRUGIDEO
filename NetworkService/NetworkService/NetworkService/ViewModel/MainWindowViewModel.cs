@@ -145,12 +145,6 @@ namespace NetworkService.ViewModel
                         networkDisplayViewModel.LineCollection.Add(l);
                     }
                 }
-
-
-            }
-            else if(saveState.CommandType == CommandType.LineManipulation)
-            {
-
             }
             
 

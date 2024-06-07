@@ -29,6 +29,7 @@
             <views:MeasurementGraphView/>
         </DataTemplate>
     </Window.Resources>
+    
     <Grid Background="#476072">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

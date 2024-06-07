@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace NetworkService
+namespace Helpers.NetworkService
 {
     public class InverseBooleanConverter : IValueConverter
     {

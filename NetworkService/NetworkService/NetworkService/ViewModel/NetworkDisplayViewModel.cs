@@ -485,28 +485,7 @@ namespace NetworkService.ViewModel
                 });
             }
         }
-        /*
-         * public static void SaveState()
-        {
-
-            Dictionary<int, FlowMeter> entityState = new Dictionary<int, FlowMeter>();
-            foreach (var entry in AddedToGrid)
-            {
-                entityState.Add(entry.Key, entry.Value);
-            }
-            Dictionary<string, Line> lineState = new Dictionary<string, Line>();
-            foreach (var entry in Lines)
-            {
-                lineState.Add(entry.Key, entry.Value);
-            }
-
-            List<object> state = new List<object>() { entityState, lineState };
-            //pushing state onto an undo stack
-            MainWindowViewModel.UndoStack.Push(
-                new SaveState<CommandType, object>(CommandType.CanvasManipulation, state));
-
-        }
-         */
+        
         private void SaveCanvasState()
         {
             List<Entity> entityState = new List<Entity>();

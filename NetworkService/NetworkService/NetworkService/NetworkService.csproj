@@ -73,7 +73,7 @@
     <Compile Include="BindableBase.cs" />
     <Compile Include="Data\ComboBoxItems.cs" />
     <Compile Include="Helpers\ToastNotifications.cs" />
-    <Compile Include="InverseBooleanConverter.cs" />
+    <Compile Include="Helpers\InverseBooleanConverter.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\EntityTypeGroup.cs" />
     <Compile Include="Model\Line.cs" />

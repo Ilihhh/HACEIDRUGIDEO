@@ -18,7 +18,6 @@ namespace NetworkService.ViewModel
         public List<string> ComboBoxItems { get; set; } = Data.ComboBoxItems.entityTypes.Keys.ToList();
         public ObservableCollection<Entity> entitiesToShow;
         public ObservableCollection<Entity> Entities { get; set; }
-        public ObservableCollection<Entity> FilteredEntities { get; set; }
 
         public MyICommand AddEntityCommand { get; set; }
         public MyICommand RemoveEntityCommand { get; set; }
